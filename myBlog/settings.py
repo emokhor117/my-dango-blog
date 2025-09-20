@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-$9z2xb2e_@+64^+hhypm8ykxub^r0c)zth&!znm8*zb@k9i2^k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["myBlog.onrender.com"]
+ALLOWED_HOSTS = ["my-dango-blog.onrender.com"]
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/posts/'
