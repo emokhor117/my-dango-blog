@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+{%load static%}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'post/style.css'%}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post</title>
+</head>
+<body>
+    <div class="container">
+        <div class="logout">
+            <div class="link">
+                <form action= "{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <button type="submit">Logout</button></p>
+                </form>
+            </div>
+        </div>
+        <div class="header">
+        <p class="Heading"> Hi {{ request.user.username}}, let's create a new post </p>
+        
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+        <div class="form-input">
+            <label for="id_title">Title</label>
+            <input name="title" value="{{ form.title.value|default:'' }}" placeholder="Input your title"/>
+            {{ form.title.errors }}
+        </div>
+        <div class="form-input">
+            <label for="">Content</label>
+            <textarea name="content" rows="5" placeholder="Please enter your content here"></textarea>
+            {{form.content.errors}}
+        </div>
+
+       <div class="form-input">
+        <label for="file-upload" class="custom-file-upload">
+            Upload your files here
+        </label>
+        <input  name="image" type="file"/>
+        </div>
+
+        <div class="post-error">
+            <p>Please fill in all required details</p>
+        </div>
+
+        <div class="Section">
+        <div class="back-sect">
+            <div class="Back">
+                <i class="fa-solid fa-arrow-left"></i>
+                <a href="{%url 'posts_list'%}">Back</a>
+            </div>
+        </div>
+        <div class="submit-sect">
+            <div class="Submit">
+                <i class="fa-solid fa-check"></i>
+                <button type="submit">Submit</button>
+            </div>
+        </div>
+        </form>
+    </div>
+    </div>
+</body>
+</html>

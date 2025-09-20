@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    Post List
+{% endblock %}
+
+
+{% block pre_heading %}
+<div class="header-top">
+
+    <div class="logout">
+            <div class="link">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <button type="submit">Logout</a>
+                </form>
+            </div>
+        </div>
+    <span class="name-tag"> Welcome, {{ request.user.username }}. </span>
+        <div class="new-post">
+            <div class="addPost">
+                <a href="{%url 'new_post'%}">New Post</a>
+                <i class="fa-solid fa-plus"></i>
+            </div>
+        </div>
+</div>
+{% endblock %}
+    
+
+{% block page_heading %}
+    This is the post list.
+{% endblock %}
+
+{% block post_heading %}
+        
+{% endblock %}
+
+{% block content %}
+        {% for post in allPosts %}
+
+            <div class="post">
+                <span class="title"> {{post.title}}</span>
+                <p class="content"> {{post.content}}</p>
+                <hr />
+                <div class="icons">
+                    <div class="icon-group">
+                        <a href="{% url 'view_post' post.id%}"><i class="fa-solid fa-eye" style="color: green;"></i></a>
+                        <a href="{% url 'edit_post' post.id%}"><i class="fa-solid fa-file-pen"></i></a>
+                        <form method="POST" action="{% url 'delete_post' post.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {%empty%}
+            <p>No record found</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+

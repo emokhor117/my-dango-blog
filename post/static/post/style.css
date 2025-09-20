@@ -1,0 +1,225 @@
+.Heading{
+    justify-content: center;
+    font-size: 25px;
+    border: 10px black;
+    font-weight: 700;
+}
+
+.header-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Heading2{
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.name-tag{
+    text-align: left;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+}
+
+.link .linkText{
+    font-weight: 700;
+    color: red;
+    button: none;
+    text-decoration: none;
+}
+
+.password-rules{
+    font-size: 10px;
+    color: grey;
+    margin: 0;
+    padding: 0;
+}
+
+.header{
+    background-color: brown;
+    color: white;
+    padding: 1em;
+}
+
+.submit-sect{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 1em;
+}
+
+.back-sect{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 1em;
+}
+
+.Back{
+    background-color: White;
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 0.5;
+    padding: 1em;
+    text-decoration: none;
+}
+
+.Submit a{
+    color: white;
+    text-decoration: none;
+}
+
+.Section{
+    display: flex;
+    justify-content: end;
+    padding: 1em;
+}
+
+.Back a{
+    color: black;
+    text-decoration: none;
+}
+
+.Submit{
+    background-color: brown;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.5;
+    padding: 1em;
+    text-decoration: none;
+}
+
+.post:hover{
+    background-color: brown;
+    color: white;
+}
+
+.form-input{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 1em 0;
+}
+
+.post-title{
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.imagepost{
+    background-color: white;
+    display: flex;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.content-title{
+    font-size: 20px;
+
+}
+
+img{
+    size: 60px;
+    width: 500px;
+    height: 300px;
+    margin: 10px;
+}
+
+/* Style your custom label */
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+  background: white;
+  color: black;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+
+.form-input input, textarea{
+padding: 0.5em;
+border-radius: 0.2em;
+border: 0;
+outline: none;
+font-family: Poppins;
+}
+
+.post-error{
+    font-size: 10px;
+    color: red;
+    text-align: right;
+}
+
+.login{
+    display: block;
+}
+
+.login input{
+    width: 70%;
+}
+
+.errorlist{
+    font-size: 10px;
+    color: red;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.errorlist li{
+    list-style-type: none;
+}
+
+.container{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px;
+    border: 2px black;
+}
+
+.new-post{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.addPost{
+    padding: 1em;
+    color: white;
+    background-color: black;
+    align-items: center;
+    display: flex;
+    margin-bottom: 1em;
+}
+
+.addPost a{
+    color: white;
+    text-decoration: none;
+}
+
+.post {
+    padding: 1em;
+    margin: 1em 0;
+    background-color: white;
+}
+
+.post .title{
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.post .content{
+    font-size: 15px;
+    font-weight: 200;
+}
+
+body{
+    font-family: Poppins;
+    background-color: bisque;
+}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block page_heading %}
+Login
+{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+        <div class="form-input">
+            <label for="id_title">Username</label>
+            <input name="username" type="text" value="{{ form.title.value|default:'' }}" placeholder="Please input your email"/>
+            {{ form.title.errors }}
+        </div>
+        <div class="form-input">
+            <label for="">Password</label>
+            <input name="password" type="password" placeholder="Please enter your password here"></textarea>
+            {{form.content.errors}}
+        </div>
+
+
+        <div class="link">
+           <span class="linkText"> Don't have an account yet? <a href="{% url 'register' %}">Register here</a></span>
+        </div>
+
+
+        <div class="post-error">
+            <p>Please fill in all required details</p>
+        </div>
+
+        <div class="Section">
+        <div class="submit-sect">
+            <div class="Submit">
+                <i class="fa-solid fa-check"></i>
+                <button type="submit">Submit</button>
+            </div>
+        </div>
+        </form>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POST SINGLE</title>
+</head>
+<body>
+    <p class="name-tag"> Welcome, {{ request.user.username}}</p>
+    {% if post != None %}
+        
+        <div>Title: {{ post.title }}</div>
+        <hr />
+        <div>Content: {{ post.content }}</div>  
+    {% else %}
+        <p>No post found for {{id}}!</p>
+    {% endif %}
+</body>
+</html>

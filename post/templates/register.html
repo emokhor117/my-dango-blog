@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block page_heading %}
+Register
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-input">
+            <label for="firstname">First Name</label>
+            <input name="first_name" id="firstname" type="text" value="{{ signup.first_name.value|default:'' }}" placeholder="Please input your first name"/>
+            {{ signup.first_name.errors }}
+
+        </div>
+
+        <div class="form-input">
+            <label for="lastname">Last Name</label>
+            <input name="last_name" id="lastname" type="text" value="{{ signup.last_name.value|default:'' }}" placeholder="Please input your last name"/>
+            {{ signup.last_name.errors }}
+        </div>
+
+        <div class="form-input">
+            <label for="id_username">Username</label>
+            <input name="username" type="text" value="{{ form.username.value|default:'' }}" placeholder="Please input your username"/>
+            {{ form.username.errors }}
+        </div>
+
+        <div class="form-input">
+            <label for="id_email">Email</label>
+            <input name="email" type="email" value="{{ form.email.value|default:'' }}" placeholder="Please input your email"/>
+            {{ form.email.errors }}
+        </div>
+
+        <div class="form-input">
+            <label for="id_password1">Password</label>
+            <input name="password1" type="password" placeholder="Please enter your password here"></textarea>
+            {{form.password1.errors}}
+        </div>
+
+        <div class="form-input">
+            <label for="id_password2">Confirm Password</label>
+            <input name="password2" type="password" placeholder="Please confirm your password here"></textarea>
+            {{form.password2.errors}}
+        </div>
+
+
+        <div class="password-rules">
+            <p>Password Rules: </p>
+            <li>
+                <ol>Your password can’t be too similar to your other personal information.</ol>
+                <ol>Your password must contain at least 8 characters.</ol>    
+                <ol>Your password can’t be a commonly used password.</ol>
+                <ol>Your password can’t be entirely numeric.</ol>
+            </li>
+        </div>
+        <div class="submit-sect">
+            <div class="Submit">
+                <i class="fa-solid fa-check"></i>
+                    <button type="submit">Register</button>
+            </div>
+        </div>
+    </form>
+
+        <div class="link">
+           <span class="linkText"> Already a member? <a href="{% url 'login' %}">Login here</a></span>
+        </div>
+
+</div>
+
+</body>
+</html>
+
+{% endblock %}

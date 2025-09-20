@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    Edit Post
+{% endblock %}
+
+{% block page_heading %}
+    Hi {{ request.user.username}}, let's edit your post together!
+{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data" >
+            {% csrf_token %}
+        <div class="form-input">
+            <input class="post-title" value="{{post.title}}" name="title" placeholder="Input your title"/>
+        </div>
+                <div class="imagepost">
+            <span class="title"{{post.title}}></span>
+            {% if post.image == Null %}
+            
+            {% else %}
+            <div>
+                <img src="{{post.image.url}}" alt="">
+            </div>
+            {% endif %}
+        
+        <div class="form-input"> 
+            <textarea class="content-title" name="content" rows="5" placeholder="Please enter your content here">{{post.content}}</textarea>
+            <!-- <form method="POST" action="{% url 'delete_post' post.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form> -->
+        </div>
+        </div>
+               <div class="form-input">
+        <label for="file-upload" class="custom-file-upload">
+            Upload your files here
+        </label>
+        <input  name="image" type="file"/>
+        </div>
+        <div class="Section">
+        <div class="back-sect">
+            <div class="Back">
+                <i class="fa-solid fa-arrow-left"></i>
+                <a href="{%url 'posts_list'%}">Back</a>
+            </div>
+        </div>
+        <div class="submit-sect">
+            <div class="Submit">
+                <i class="fa-solid fa-check"></i>
+                <button type="submit">Update</button>
+            </div>
+        </div>
+        </form>
+{% endblock %}
