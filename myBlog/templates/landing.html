@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThoughtDrop | Landing</title>
+
+    <style>
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-65Medium-Trial.otf' %}") format('opentype');
+      font-weight:700;
+      /* bold */
+    }
+
+    @font-face {
+      font-family: 'Neue Haas Grotesk Round';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Display (Round Dots)/NeueHaasGrotDispRound-95Black-Trial.otf' %}") format('opentype');
+      font-weight:900; 
+      /* black */
+    }
+
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-55Roman-Trial.otf' %}") format('opentype');
+      font-weight: 300;
+      /* light */
+    }
+  </style>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Neue Haas Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body class="bg-gray-100 text-black dark:bg-black dark:text-white flex items-center justify-center h-screen transition-colors duration-300 relative">
+
+  <div class="text-center space-y-8">
+    <!-- Logo / Title -->
+    <h1 class="text-4xl sm:text-6xl font-extrabold flex items-center justify-center gap-3">
+      <i class="fa-solid fa-arrows-turn-to-dots"></i>
+      <span id="brand-text">ThoughtDrop</span>
+    </h1>
+    <p class="text-gray-600 dark:text-white">Join the discussion today!</p>
+
+    <!-- Buttons stacked with OR -->
+    <div class="space-y-4">
+      <!-- Create Account -->
+      <a href="{% url 'register' %}" 
+         class="block w-full px-6 py-3 rounded-full bg-black dark:bg-gray-400 text-white dark:text-black font-black hover:bg-gray-800 dark:hover:bg-white transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-user-plus"></i>
+        Create Account
+      </a>
+
+      <!-- OR separator -->
+      <div class="flex items-center gap-2">
+        <div class="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+        <span class="text-sm text-gray-500 dark:text-gray-400">OR</span>
+        <div class="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+      </div>
+
+      <p class="text-black dark:text-white">If you already have an account</p>
+
+      <!-- Sign In -->
+      <a href="{% url 'login' %}" 
+         class="block w-full px-6 py-3 font-sans rounded-full font-black bg-gray-200 dark:bg-gray-800 text-black dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        Sign In
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer Links -->
+  <footer class="absolute bottom-4 w-full text-center text-xs text-gray-500 dark:text-gray-400 space-x-4">
+    <a href="/terms" class="hover:underline">Terms of Service</a>
+    <a href="/privacy" class="hover:underline">Privacy Policy</a>
+    <a href="/about" class="hover:underline">About</a>
+  </footer>
+
+  <!-- Dark Mode Toggle -->
+  <button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-lg">
+    <i id="theme-icon" class="fa-solid fa-moon"></i>
+  </button>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'dark') {
+      html.classList.add('dark');
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      }
+    });
+  </script>
+</body>
+</html>

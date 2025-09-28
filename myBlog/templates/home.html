@@ -1,0 +1,242 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThoughtDrop Blog | Homepage</title>
+
+  <style>
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-65Medium-Trial.otf' %}") format('opentype');
+      font-weight: 700;
+      /* bold */
+    }
+
+    @font-face {
+      font-family: 'Neue Haas Grotesk Round';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Display (Round Dots)/NeueHaasGrotDispRound-95Black-Trial.otf' %}") format('opentype');
+      font-weight:900; 
+      /* black */
+    }
+
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-55Roman-Trial.otf' %}") format('opentype');
+      font-weight: 300;
+      /* light */
+    }
+  </style>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Neue Haas Grotesk"'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body class="bg-gray-100 text-black dark:bg-black gap-2 dark:text-white transition-colors duration-300">
+
+  <!-- Navbar -->
+  <nav class="flex items-center justify-between px-6 py-4 bg-gray-100 dark:bg-black">
+
+    
+    <div class="text-xl font-bold"><i class="fa-solid fa-arrows-turn-to-dots"></i> ThoughtDrop</div>
+
+    <!-- Middle: Login -->
+    <div class="text-normal flex">  
+      <a href="{% url 'landing' %}" style="font-weight: 700;" class="flex font-sans items-center font-normal gap-2 px-6 py-2 rounded-full bg-black dark:bg-gray-400 dark:hover:bg-white dark:text-black text-white hover:bg-gray-800 transition">
+        <span>Join the Discussion</span>
+        <i class="fa-solid fa-arrow-up-right-from-square text-white dark:text-black"></i>
+      </a>
+    </div>
+
+    <!-- Right: Dark/Light toggle -->
+    <button id="theme-toggle" class="p-2 rounded-lg   transition">
+        <i id="theme-icon" class="fa-solid fa-moon"></i>
+    </button>
+  </nav>
+
+  <!-- Header Section -->
+  <header class="p-6 text-center">
+    <h2 class="text-3xl font-sans" style="font-weight: 700;">Capture moments. Share perspectives.</h2>
+    <p class="text-sm mt-2 text-gray-600 dark:text-white">Because every thought is worth sharing!</p>
+  </header>
+
+<!-- main section  -->
+
+<main class="w-full px-4 sm:px-8 md:px-16 lg:px-24 mt-10">
+  <h2 class="text-2xl font-semibold mb-6 text-center" >Trending topics from our thought droppers</h2>
+
+  <!-- Carousel Wrapper -->
+  <div class="relative overflow-hidden">
+    <div id="carousel" class="flex transition-transform duration-700 ease-in-out">
+      
+      <!-- Card 1 -->
+      <div class="min-w-full flex bg-white dark:bg-gray-900 rounded-xl p-6 gap-6">
+        <!-- Left: Profile -->
+        <div class="flex flex-col items-center w-1/3">
+          <img src="{% static 'images/port1.jpeg' %}" alt="Author 1"
+               class="w-20 h-20 rounded-full object-cover mb-4">
+          <h3 class="text-lg font-semibold">Maxwell Kilmann</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Web Developer & Writer</p>
+          <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+            <p><strong>Top Post:</strong> "Mastering CSS Grid"</p>
+          </div>
+        </div>
+        <!-- Right: Blog Post Preview -->
+        <div class="w-2/3">
+          <h4 class="text-xl font-semibold mb-2">Why CSS Grid Changed the Game</h4>
+          <p class="text-gray-700 dark:text-gray-300">
+            CSS Grid brought a new way of thinking about layouts on the web...
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="min-w-full flex bg-white dark:bg-gray-900 rounded-xl p-6 gap-6">
+        <div class="flex flex-col items-center w-1/3">
+          <img src="{% static 'images/port2.jpg' %}" alt="Author 2"
+               class="w-20 h-20 rounded-full object-cover mb-4">
+          <h3 class="text-lg font-semibold">John Smith</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Tech Enthusiast</p>
+          <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+            <p><strong>Top Post:</strong> "The Future of AI"</p>
+          </div>
+        </div>
+        <div class="w-2/3">
+          <h4 class="text-xl font-semibold mb-2">How AI Is Reshaping Our World</h4>
+          <p class="text-gray-700 dark:text-gray-300">
+            Artificial Intelligence isn’t just hype. It’s influencing healthcare guys...
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="min-w-full flex bg-white dark:bg-gray-900 rounded-xl p-6 gap-6">
+        <div class="flex flex-col items-center w-1/3">
+          <img src="{% static 'images/port3.jpeg' %}" alt="Author 3"
+               class="w-20 h-20 rounded-full object-cover mb-4">
+          <h3 class="text-lg font-semibold">Amara Lee</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Student Blogger</p>
+          <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+            <p><strong>Top Post:</strong> "Learning Django"</p>
+          </div>
+        </div>
+        <div class="w-2/3">
+          <h4 class="text-xl font-semibold mb-2">My First Month with Django</h4>
+          <p class="text-gray-700 dark:text-gray-300">
+            Getting into Django was intimidating at first, but with small steps...
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Controls -->
+    <button id="prev" class="absolute top-1/2 left-4 -translate-y-1/2 bg-gray-200 dark:bg-gray-700 p-2 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600">
+      ‹
+    </button>
+    <button id="next" class="absolute top-1/2 right-4 -translate-y-1/2 bg-gray-200 dark:bg-gray-700 p-2 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600">
+      ›
+    </button>
+
+    <!-- Indicators -->
+    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+      <span class="dot w-3 h-3 rounded-full bg-gray-400"></span>
+      <span class="dot w-3 h-3 rounded-full bg-gray-300"></span>
+      <span class="dot w-3 h-3 rounded-full bg-gray-300"></span>
+    </div>
+  </div>
+</main>
+
+
+  <!-- Footer -->
+  <footer class="mt-12 p-4 text-center text-gray-500 dark:text-gray-400 text-sm">
+   Copyright &copy; {{ year }} The ThoughtDrop Blog. All rights reserved.
+  </footer>
+
+<!-- Carousel Script -->
+<script>
+  const carousel = document.getElementById('carousel');
+  const dots = document.querySelectorAll('.dot');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+
+  let index = 0;
+  const totalCards = carousel.children.length;
+
+  function updateCarousel() {
+    carousel.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('bg-gray-400', i === index);
+      dot.classList.toggle('bg-gray-300', i !== index);
+    });
+  }
+
+  function nextSlide() {
+    index = (index + 1) % totalCards;
+    updateCarousel();
+  }
+
+  function prevSlide() {
+    index = (index - 1 + totalCards) % totalCards;
+    updateCarousel();
+  }
+
+  next.addEventListener('click', nextSlide);
+  prev.addEventListener('click', prevSlide);
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      index = i;
+      updateCarousel();
+    });
+  });
+
+
+  setInterval(nextSlide, 4000);
+
+  // Initial state
+  updateCarousel();
+</script>
+
+  <!-- Dark Mode Script -->
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const html = document.documentElement;
+
+  // Set initial theme
+  if (localStorage.getItem('theme') === 'dark') {
+    html.classList.add('dark');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+  }
+
+  // Toggle on click
+  themeToggle.addEventListener('click', () => {
+    if (html.classList.contains('dark')) {
+      html.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      themeIcon.classList.remove('fa-sun');
+      themeIcon.classList.add('fa-moon');
+    } else {
+      html.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    }
+  });
+</script>
+</body>
+</html>

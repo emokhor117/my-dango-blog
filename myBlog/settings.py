@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import dj_database_url
 import environ
+from datetime import timedelta
 
 #default values
 env = environ.Env(
@@ -37,7 +38,7 @@ SECRET_KEY = 'django-insecure-$9z2xb2e_@+64^+hhypm8ykxub^r0c)zth&!znm8*zb@k9i2^k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["my-dango-blog.onrender.com"]
+ALLOWED_HOSTS = ["my-dango-blog.onrender.com", "127.0.0.1", "localhost"]
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/posts/'
@@ -54,6 +55,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'post', 
     'myBlog',
+    'blogapi',
+    'drf_yasg',
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -161,3 +166,24 @@ STATICFILES_STORAGE = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',)
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}

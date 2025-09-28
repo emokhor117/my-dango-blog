@@ -1,78 +1,225 @@
-{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}
-    Register
-{% endblock %}
+<!DOCTYPE html>
 
-{% block page_heading %}
-Register
-{% endblock %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up for ThoughtDrop</title>
 
-{% block content %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-input">
-            <label for="firstname">First Name</label>
-            <input name="first_name" id="firstname" type="text" value="{{ signup.first_name.value|default:'' }}" placeholder="Please input your first name"/>
-            {{ signup.first_name.errors }}
+  <!-- Custom Fonts -->
 
-        </div>
+  <style>
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-65Medium-Trial.otf' %}") format('opentype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk Round';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Display (Round Dots)/NeueHaasGrotDispRound-95Black-Trial.otf' %}") format('opentype');
+      font-weight: 900;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-55Roman-Trial.otf' %}") format('opentype');
+      font-weight: 300;
+    }
 
-        <div class="form-input">
-            <label for="lastname">Last Name</label>
-            <input name="last_name" id="lastname" type="text" value="{{ signup.last_name.value|default:'' }}" placeholder="Please input your last name"/>
-            {{ signup.last_name.errors }}
-        </div>
+    ul.errorlist {
+      color: #ef4444; 
+      font-size: 0.875rem;
+      font-weight: 800;
+      margin-top: 0.25rem;
+      list-style: none;
+      padding: 0;
+    }
+  </style>
 
-        <div class="form-input">
-            <label for="id_username">Username</label>
-            <input name="username" type="text" value="{{ form.username.value|default:'' }}" placeholder="Please input your username"/>
-            {{ form.username.errors }}
-        </div>
+  <!-- Tailwind -->
 
-        <div class="form-input">
-            <label for="id_email">Email</label>
-            <input name="email" type="email" value="{{ form.email.value|default:'' }}" placeholder="Please input your email"/>
-            {{ form.email.errors }}
-        </div>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        <div class="form-input">
-            <label for="id_password1">Password</label>
-            <input name="password1" type="password" placeholder="Please enter your password here"></textarea>
-            {{form.password1.errors}}
-        </div>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Neue Haas Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
 
-        <div class="form-input">
-            <label for="id_password2">Confirm Password</label>
-            <input name="password2" type="password" placeholder="Please confirm your password here"></textarea>
-            {{form.password2.errors}}
-        </div>
+  <!-- Font Awesome -->
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
 
-        <div class="password-rules">
-            <p>Password Rules: </p>
-            <li>
-                <ol>Your password can’t be too similar to your other personal information.</ol>
-                <ol>Your password must contain at least 8 characters.</ol>    
-                <ol>Your password can’t be a commonly used password.</ol>
-                <ol>Your password can’t be entirely numeric.</ol>
-            </li>
-        </div>
-        <div class="submit-sect">
-            <div class="Submit">
-                <i class="fa-solid fa-check"></i>
-                    <button type="submit">Register</button>
-            </div>
-        </div>
-    </form>
+<body class="bg-gray-100 text-black dark:bg-black dark:text-white font-sans transition-colors duration-300">
 
-        <div class="link">
-           <span class="linkText"> Already a member? <a href="{% url 'login' %}">Login here</a></span>
-        </div>
+<!-- Dark Mode Toggle -->
 
+<button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-lg">
+  <i id="theme-icon" class="fa-solid fa-moon"></i>
+</button>
+
+<div class="min-h-screen flex justify-center pt-12 pb-12 sm:pt-20 px-4">
+  <div class="flex flex-col md:flex-row w-full max-w-4xl bg-white dark:bg-gray-900 shadow-md rounded-xl overflow-hidden">
+
+ 
+<!-- Left Side: Logo & Title -->
+<div class="md:w-1/3 flex flex-col items-center justify-center p-8 ">
+  <i class="fa-solid fa-arrows-turn-to-dots text-4xl mb-4"></i>
+  <h1 class="text-2xl font-bold">ThoughtDrop</h1>
 </div>
+
+<!-- Right Side: Signup Form -->
+<form method="post" enctype="multipart/form-data" class="w-full md:w-2/3 p-8 space-y-6">
+  {% csrf_token %}
+
+  <!-- First & Last Name -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label for="firstname" class="block text-sm font-semibold mb-2">First Name</label>
+      <input 
+        name="first_name" id="firstname" type="text"
+        value="{{ signup.first_name.value|default:'' }}" 
+        placeholder="Input your first name"
+        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+               bg-gray-50 dark:bg-gray-800 text-black dark:text-white 
+               focus:ring-2 focus:ring-gray-600 focus:outline-none"
+      />
+      {{ signup.first_name.errors }}
+    </div>
+    <div>
+      <label for="lastname" class="block text-sm font-semibold mb-2">Last Name</label>
+      <input 
+        name="last_name" id="lastname" type="text"
+        value="{{ signup.last_name.value|default:'' }}" 
+        placeholder="Input your last name"
+        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+               bg-gray-50 dark:bg-gray-800 text-black dark:text-white 
+               focus:ring-2 focus:ring-gray-600 focus:outline-none"
+      />
+      {{ signup.last_name.errors }}
+    </div>
+  </div>
+
+  <!-- Username -->
+  <div>
+    <label for="id_username" class="block text-sm font-semibold mb-2">Username</label>
+    <input 
+      name="username" id="id_username" type="text"
+      value="{{ form.username.value|default:'' }}" 
+      placeholder="Input your username"
+      class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+             bg-gray-50 dark:bg-gray-800 text-black dark:text-white 
+             focus:ring-2 focus:ring-gray-600 focus:outline-none"
+    />
+    {{ form.username.errors }}
+  </div>
+
+  <!-- Email -->
+  <div>
+    <label for="id_email" class="block text-sm font-semibold mb-2">Email</label>
+    <input 
+      name="email" id="id_email" type="email"
+      value="{{ form.email.value|default:'' }}" 
+      placeholder="Input a valid email address"
+      class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+             bg-gray-50 dark:bg-gray-800 text-black dark:text-white 
+             focus:ring-2 focus:ring-gray-600 focus:outline-none"
+    />
+    {{ form.email.errors }}
+  </div>
+
+  <!-- Password -->
+  <div>
+    <label for="id_password1" class="block text-sm font-semibold mb-2">Password</label>
+    <input 
+      name="password1" id="id_password1" type="password"
+      placeholder="Enter your password"
+      class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+             bg-gray-50 dark:bg-gray-800 text-black dark:text-white 
+             focus:ring-2 focus:ring-gray-600 focus:outline-none"
+    />
+    {{ form.password1.errors }}
+  </div>
+
+  <!-- Confirm Password -->
+  <div>
+    <label for="id_password2" class="block text-sm font-semibold mb-2">Confirm Password</label>
+    <input 
+      name="password2" id="id_password2" type="password"
+      placeholder="Repeat the password above"
+      class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+             bg-gray-50 dark:bg-gray-800 text-black dark:text-white 
+             focus:ring-2 focus:ring-gray-600 focus:outline-none"
+    />
+    {{ form.password2.errors }}
+  </div>
+
+  <!-- Password Rules -->
+  <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-sm text-gray-600 dark:text-gray-300">
+    <p class="font-semibold mb-2">Password Rules:</p>
+    <ul class="list-disc list-inside space-y-1">
+      <li>Your password can’t be too similar to your other personal information.</li>
+      <li>Your password must contain at least 8 characters.</li>
+      <li>Your password can’t be a commonly used password.</li>
+      <li>Your password can’t be entirely numeric.</li>
+    </ul>
+  </div>
+
+  <!-- Submit -->
+  <button type="submit" 
+    class="w-full px-4 py-3 rounded-lg 
+           bg-black dark:bg-gray-400 dark:hover:bg-white 
+           dark:text-black text-white hover:bg-gray-800 
+           transition font-semibold">
+    Create account
+  </button>
+
+  <!-- Login Redirect -->
+  <div class="text-center text-sm">
+    <span class="text-gray-600 dark:text-gray-300">Already a member?</span>
+    <a href="{% url 'login' %}" class="font-semibold text-black dark:text-white hover:underline"> Login here</a>
+  </div>
+</form>
+ 
+
+  </div>
+</div>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const html = document.documentElement;
+
+  // Apply saved theme
+  if (localStorage.getItem('theme') === 'dark') {
+    html.classList.add('dark');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+  }
+
+  themeToggle.addEventListener('click', () => {
+    if (html.classList.contains('dark')) {
+      html.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      themeIcon.classList.remove('fa-sun');
+      themeIcon.classList.add('fa-moon');
+    } else {
+      html.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    }
+  });
+</script>
 
 </body>
 </html>
-
-{% endblock %}

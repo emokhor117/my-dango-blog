@@ -5,6 +5,16 @@ from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm
 from django.contrib.auth import login
 
+
+def home(request):
+    return render(request, 'home.html')
+
+def landing_page(request):
+    return render(request, 'landing.html')
+
+def about_page(request):
+    return render(request, 'about.html')
+
 def register_user(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
