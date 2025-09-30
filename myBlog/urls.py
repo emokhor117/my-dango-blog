@@ -49,7 +49,9 @@ urlpatterns = [
     path('', include('post.urls')),
     path('landing/', views.landing_page, name='landing'),  # Landing page with sign in/create account options
     path('register/', views.register_user, name='register'),
+    path('tos/', views.tos_page, name='tos'),
     path('about/', views.about_page, name='about'),
+    path('privacy/', views.privacy_page, name='privacy'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
 
@@ -62,5 +64,6 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
-if (settings.DEBUG):
-    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,64 +1,167 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posts | ThoughtDrop</title>
 
-{% block page_title %}
-    Post List
-{% endblock %}
+  <style>
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-65Medium-Trial.otf' %}") format('opentype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk Round';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Display (Round Dots)/NeueHaasGrotDispRound-95Black-Trial.otf' %}") format('opentype');
+      font-weight: 900;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-55Roman-Trial.otf' %}") format('opentype');
+      font-weight: 300;
+    }
+  </style>
 
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Neue Haas Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
 
-{% block pre_heading %}
-<div class="header-top">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
 
-    <div class="logout">
-            <div class="link">
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <button type="submit">Logout</a>
-                </form>
-            </div>
-        </div>
-    <span class="name-tag"> Welcome, {{ request.user.username }}. </span>
-        <div class="new-post">
-            <div class="addPost">
-                <a href="{%url 'new_post'%}">New Post</a>
-                <i class="fa-solid fa-plus"></i>
-            </div>
-        </div>
+<body class="bg-gray-100 text-black dark:bg-black dark:text-white font-sans transition-colors duration-300">
+
+<!-- Dark mode toggle -->
+<button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-lg">
+  <i id="theme-icon" class="fa-solid fa-moon"></i>
+</button>
+
+<!-- Navbar -->
+<nav class="w-full border-b border-gray-300 dark:border-gray-700 flex justify-between items-center px-6 py-4">
+  <h1 class="text-xl font-bold"><i class="fa-solid fa-arrows-turn-to-dots"></i>ThoughtDrop</h1>
+ <a href="{% url 'new_post' %}" 
+     class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+    <i class="fa-solid fa-plus"></i> Drop a thought
+  </a>
 </div>
-{% endblock %}
-    
+  <div class="flex items-center gap-4">
+    <span class="text-sm">Welcome, {{ request.user.username }}</span>
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="text-red-500 hover:underline">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </form>
+  </div>
+</nav>
 
-{% block page_heading %}
-    This is the post list.
-{% endblock %}
+<!-- Posts Section -->
+<div class="max-w-2xl mx-auto mt-6">
 
-{% block post_heading %}
-        
-{% endblock %}
+  {% for post in allPosts %}
+  <div class="py-6 border-b border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 transition cursor-pointer"
+       onclick="window.location.href='{% url 'view_post' post.id %}'">
 
-{% block content %}
-        {% for post in allPosts %}
+    <!-- Top row: profile + name + timestamp + menu -->
+    <div class="flex justify-between items-start">
+      <div class="flex items-center gap-3">
+        <!-- Profile Picture -->
+        <img src="{{ post.owner.profile.profile_picture.url |default:'/media/profile_pictures/default.jpg' }}" 
+             alt="{{ post.owner.username }}'s profile picture" 
+             class="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-600">
 
-            <div class="post">
-                <span class="title"> {{post.title}}</span>
-                <p class="content"> {{post.content}}</p>
-                <hr />
-                <div class="icons">
-                    <div class="icon-group">
-                        <a href="{% url 'view_post' post.id%}"><i class="fa-solid fa-eye" style="color: green;"></i></a>
-                        <a href="{% url 'edit_post' post.id%}"><i class="fa-solid fa-file-pen"></i></a>
-                        <form method="POST" action="{% url 'delete_post' post.id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        {%empty%}
-            <p>No record found</p>
-        {% endfor %}
+        <div>
+          <span class="font-semibold">{{ post.owner.username }}</span>
+          <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">{{ post.created_at|date:"M d, Y H:i" }}</span>
+        </div>
+      </div>
+
+      <!-- Post menu (visible only to owner) -->
+      {% if post.owner == request.user %}
+      <div class="relative group">
+        <i class="fa-solid fa-ellipsis cursor-pointer hover:text-gray-400"></i>
+        <div class="absolute right-0 mt-2 hidden group-hover:block bg-white dark:bg-gray-800 shadow-md rounded-md text-sm z-10">
+          <a href="{% url 'edit_post' post.id %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Edit</a>
+          <form method="POST" action="{% url 'delete_post' post.id %}">
+            {% csrf_token %}
+            <button type="submit" class="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-500">
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endif %}
     </div>
-{% endblock %}
 
+    <!-- Post content -->
+    <div class="mt-4 ml-12">
+      <h2 class="text-lg font-bold">{{ post.title }}</h2>
+      <p class="text-sm mt-1">{{ post.content }}</p>
+
+      {% if post.image %}
+      <div class="mt-3">
+        <img src="{{ post.image.url }}" alt="Post image" class="rounded-lg max-h-80 object-cover">
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Like & Comment actions -->
+    <div class="mt-4 ml-12 flex gap-6 text-gray-600 dark:text-gray-400">
+      <button class="flex items-center gap-1 hover:text-red-500">
+        <i class="fa-regular fa-heart"></i>
+        <span class="text-sm">{{ post.likes.count }}</span>
+      </button>
+      <button class="flex items-center gap-1 hover:text-blue-500">
+        <i class="fa-regular fa-comment"></i>
+        <span class="text-sm">{{ post.comments.count }}</span>
+      </button>
+    </div>
+
+  </div>
+  {% empty %}
+    <p class="text-center text-gray-500 mt-6">No posts yet.</p>
+  {% endfor %}
+
+</div>
+
+<script>
+  // Dark mode toggle logic
+  const toggleBtn = document.getElementById('theme-toggle');
+  const icon = document.getElementById('theme-icon');
+  const html = document.documentElement;
+
+  if (localStorage.getItem('theme') === 'dark' || 
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    icon.classList.remove('fa-moon');
+    icon.classList.add('fa-sun');
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    html.classList.toggle('dark');
+    if (html.classList.contains('dark')) {
+      localStorage.setItem('theme', 'dark');
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    } else {
+      localStorage.setItem('theme', 'light');
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+    }
+  });
+</script>
+
+</body>
+</html>

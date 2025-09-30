@@ -1,85 +1,72 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About • ThoughtDrop</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ThoughtDrop — About</title>
+
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 leading-relaxed">
+  
+  <a href="{% url 'landing' %}" 
+     class="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 rounded-md 
+            bg-gray-200 dark:bg-gray-700 text-sm font-medium text-gray-800 dark:text-gray-100
+            hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+    <i class="fa-solid fa-arrow-left"></i> Back
+  </a>
 
-  <!-- Navbar -->
-  <header class="bg-white dark:bg-gray-800 shadow-md">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-black ">ThoughtDrop</h1>
-      <nav class="space-x-6">
-        <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Home</a>
-        <a href="/about" class="text-blue-600 font-semibold">About</a>
-        <a href="/register" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Register</a>
-        <a href="/login" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Login</a>
-      </nav>
-    </div>
-  </header>
+  <main class="max-w-4xl mx-auto p-6 sm:p-12">
+    <article class="bg-white dark:bg-gray-800 shadow rounded-lg p-8">
+      <header class="mb-6">
+        <h1 class="text-3xl font-bold mb-2">About ThoughtDrop</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-300">Sharing thoughts. Building community.</p>
+      </header>
 
-  <!-- Main Content -->
-  <main class="flex-grow w-full px-6 sm:px-12 md:px-24 mt-10">
-    <section class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 text-center">
-      <h2 class="text-4xl font-bold mb-4">About ThoughtDrop</h2>
-      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-        Welcome to <strong>ThoughtDrop</strong> — a space where everyday voices matter.  
-        Here, you can share your ideas, life lessons, or random sparks of creativity,  
-        knowing someone out there might find inspiration in your words.
-      </p>
+      <section class="mb-8 p-4 border-l-4 border-purple-500 bg-purple-50 dark:bg-purple-900/30 rounded">
+        <h2 class="font-semibold text-lg mb-2">What is ThoughtDrop?</h2>
+        <p class="text-sm text-gray-700 dark:text-gray-300">
+          ThoughtDrop is a friendly, open space where anyone can share their ideas, reflections, and experiences.
+          Whether you’re posting a deep insight, a quick note, or just a passing thought — this is your place to drop it.
+        </p>
+      </section>
 
-      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-        Our mission is simple: to create a friendly community where people can drop their thoughts,  
-        connect with others, and spark conversations. Your words can ripple out and  
-        leave a lasting impact — big or small.
-      </p>
+      <section class="space-y-4">
+        <h2 class="text-xl font-semibold mt-6">Our Mission</h2>
+        <p>
+          To create a safe, welcoming platform for authentic expression, where people can connect through shared experiences
+          and perspectives.
+        </p>
 
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8">
-        <div class="p-6 rounded-lg bg-gray-100 dark:bg-gray-700 shadow-md w-full sm:w-1/3">
-          <i class="fa-solid fa-lightbulb text-3xl text-yellow-500 mb-4"></i>
-          <h3 class="text-lg font-semibold mb-2">Share Ideas</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            Drop your insights, stories, or lessons learned — no matter how small.
-          </p>
-        </div>
-        <div class="p-6 rounded-lg bg-gray-100 dark:bg-gray-700 shadow-md w-full sm:w-1/3">
-          <i class="fa-solid fa-people-group text-3xl text-blue-500 mb-4"></i>
-          <h3 class="text-lg font-semibold mb-2">Build Community</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            Connect with readers and writers who value everyday experiences.
-          </p>
-        </div>
-        <div class="p-6 rounded-lg bg-gray-100 dark:bg-gray-700 shadow-md w-full sm:w-1/3">
-          <i class="fa-solid fa-seedling text-3xl text-green-500 mb-4"></i>
-          <h3 class="text-lg font-semibold mb-2">Grow Together</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            Learn, grow, and inspire each other through shared perspectives.
-          </p>
-        </div>
-      </div>
-    </section>
+        <h2 class="text-xl font-semibold mt-6">Our Values</h2>
+        <ul class="list-disc list-inside space-y-1">
+          <li><strong>Openness:</strong> A place for honest and thoughtful sharing.</li>
+          <li><strong>Respect:</strong> Every voice deserves kindness and care.</li>
+          <li><strong>Community:</strong> Building connections through shared experiences.</li>
+        </ul>
+
+        <h2 class="text-xl font-semibold mt-6">Why ThoughtDrop?</h2>
+        <p>
+          We believe that thoughts are worth sharing — big or small. ThoughtDrop lets you capture and express them, while
+          connecting with others who resonate with your words.
+        </p>
+      </section>
+    </article>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-white dark:bg-gray-800 mt-12 py-6 shadow-inner">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600 dark:text-gray-400">
-      <p>&copy; <span id="year"></span> ThoughtDrop. All rights reserved.</p>
-      <div class="flex space-x-4 mt-4 sm:mt-0">
-        <a href="#" class="hover:text-blue-600"><i class="fab fa-twitter"></i></a>
-        <a href="#" class="hover:text-blue-600"><i class="fab fa-facebook"></i></a>
-        <a href="#" class="hover:text-blue-600"><i class="fab fa-github"></i></a>
-      </div>
-    </div>
+  <!-- small footer -->
+  <footer class="max-w-4xl mx-auto p-4 text-center text-xs text-gray-600 dark:text-gray-400">
+    &copy; <span id="td-year"></span> ThoughtDrop. All rights reserved.
   </footer>
 
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById('td-year').textContent = new Date().getFullYear();
   </script>
-
 </body>
 </html>

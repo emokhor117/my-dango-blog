@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ThoughtDrop — Privacy Policy</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 leading-relaxed">
+
+  <main class="max-w-4xl mx-auto p-6 sm:p-12">
+    <article class="bg-white dark:bg-gray-800 shadow rounded-lg p-8">
+      <header class="mb-6">
+        <h1 class="text-3xl font-bold mb-2">Privacy Policy</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-300">Last updated: <strong>September 2025</strong></p>
+      </header>
+
+      <!-- Summary / TL;DR -->
+      <section class="mb-8 p-4 border-l-4 border-green-500 bg-green-50 dark:bg-green-900/30 rounded">
+        <h2 class="font-semibold text-lg mb-2">Quick Summary</h2>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300">
+          <li>We collect only the information needed to run ThoughtDrop.</li>
+          <li>Your data is never sold or shared with advertisers.</li>
+          <li>You control your account and can delete it anytime.</li>
+          <li>Cookies are used to improve your experience.</li>
+          <li>Security is a priority, but no system is 100% secure.</li>
+        </ul>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-2 italic">
+          This is only a summary. Please read the full Privacy Policy below.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <p>
+          At <strong>ThoughtDrop</strong>, your privacy is very important to us. This Privacy Policy explains how we
+          collect, use, and safeguard your information when you use the Service.
+        </p>
+
+        <h2 class="text-xl font-semibold mt-6">1. Information We Collect</h2>
+        <p>
+          We may collect personal information you provide (such as name, email, profile details) and limited technical data
+          (such as cookies, IP address, browser type).
+        </p>
+
+        <h2 class="text-xl font-semibold mt-6">2. How We Use Information</h2>
+        <p>
+          We use your information to provide and improve the Service, communicate with you, and ensure safety and compliance.
+        </p>
+
+        <h2 class="text-xl font-semibold mt-6">3. Sharing of Information</h2>
+        <p>
+          We do not sell or rent your personal information. We may share limited data with trusted providers who help us
+          operate ThoughtDrop (e.g., hosting services).
+        </p>
+
+        <h2 class="text-xl font-semibold mt-6">4. Your Choices</h2>
+        <p>
+          You can update your profile, control cookies in your browser, and delete your account if you choose to stop using
+          ThoughtDrop.
+        </p>
+
+        <h2 class="text-xl font-semibold mt-6">5. Security</h2>
+        <p>
+          We take measures to protect your information, but we cannot guarantee complete security against all threats.
+        </p>
+
+        <h2 class="text-xl font-semibold mt-6">6. Changes</h2>
+        <p>
+          We may update this Privacy Policy periodically. Changes will be effective once posted here.
+        </p>
+      </section>
+    </article>
+  </main>
+
+  <!-- small footer -->
+  <footer class="max-w-4xl mx-auto p-4 text-center text-xs text-gray-600 dark:text-gray-400">
+    &copy; <span id="td-year"></span> ThoughtDrop. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById('td-year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
