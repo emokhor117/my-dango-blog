@@ -50,29 +50,40 @@
 
 <!-- Navbar -->
 <nav class="w-full border-b border-gray-300 dark:border-gray-700 flex justify-between items-center px-6 py-4">
-  <h1 class="text-xl font-bold"><i class="fa-solid fa-arrows-turn-to-dots"></i>ThoughtDrop</h1>
- <a href="{% url 'new_post' %}" 
-     class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-    <i class="fa-solid fa-plus"></i> Drop a thought
-  </a>
-</div>
-  <div class="flex items-center gap-4">
-    <span class="text-sm">Welcome, {{ request.user.username }}</span>
-    <form action="{% url 'logout' %}" method="post">
-      {% csrf_token %}
-      <button type="submit" class="text-red-500 hover:underline">
-        <i class="fa-solid fa-right-from-bracket"></i> Logout
-      </button>
-    </form>
+  <!-- Left: Logo -->
+  <h1 class="text-xl font-bold">
+    <i class="fa-solid fa-arrows-turn-to-dots"></i> ThoughtDrop
+  </h1>
+
+  <!-- Center: Profile -->
+  <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
+    <img src="{{ request.user.profile.profile_picture.url|default:'/media/profile_pictures/default.jpg' }}" 
+         alt="{{ request.user.username }}'s profile picture" 
+         class="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+    <span class="text-sm font-bold">{{ request.user.username }}</span>
   </div>
+
+  <!-- Right: Logout -->
+  <!-- <form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="text-red-500 hover:underline">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
+  </form> -->
 </nav>
 
+
 <!-- Posts Section -->
-<div class="max-w-2xl mx-auto mt-6">
+<div class="max-w-4xl mx-auto mt-6">
+<div class="flex justify-center items-center mb-4 px-2">
+  <a href="{% url 'new_post' %}" 
+    class="px-4 py-2 bg-black text-white rounded-lg shadow font-bold hover:bg-gray-700 transition dark:bg-gray-300 dark:text-black dark:hover:bg-white ">
+   <i class="fa-solid fa-plus"></i> New blog topic
+  </a>
+</div>
 
   {% for post in allPosts %}
-  <div class="py-6 border-b border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 transition cursor-pointer"
-       onclick="window.location.href='{% url 'view_post' post.id %}'">
+  <div class="py-6 border-b border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 transition cursor-pointer">
 
     <!-- Top row: profile + name + timestamp + menu -->
     <div class="flex justify-between items-start">
@@ -80,18 +91,17 @@
         <!-- Profile Picture -->
         <img src="{{ post.owner.profile.profile_picture.url |default:'/media/profile_pictures/default.jpg' }}" 
              alt="{{ post.owner.username }}'s profile picture" 
-             class="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-600">
-
+             class="w-10 h-10 ml-2 rounded-full object-cover border border-gray-300 dark:border-gray-600">
         <div>
           <span class="font-semibold">{{ post.owner.username }}</span>
-          <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">{{ post.created_at|date:"M d, Y H:i" }}</span>
+          <span class="text-gray-500 dark:text-gray-400 text-sm ">{{ post.created_at|date:"M d, Y H:i" }}</span>
         </div>
       </div>
 
       <!-- Post menu (visible only to owner) -->
       {% if post.owner == request.user %}
       <div class="relative group">
-        <i class="fa-solid fa-ellipsis cursor-pointer hover:text-gray-400"></i>
+        <i class="fa-solid fa-ellipsis cursor-pointer hover:text-gray-400 mr-8"></i>
         <div class="absolute right-0 mt-2 hidden group-hover:block bg-white dark:bg-gray-800 shadow-md rounded-md text-sm z-10">
           <a href="{% url 'edit_post' post.id %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Edit</a>
           <form method="POST" action="{% url 'delete_post' post.id %}">
@@ -106,7 +116,7 @@
     </div>
 
     <!-- Post content -->
-    <div class="mt-4 ml-12">
+    <a href="{% url 'view_post' post.id %}" class="mt-4 ml-14 block">
       <h2 class="text-lg font-bold">{{ post.title }}</h2>
       <p class="text-sm mt-1">{{ post.content }}</p>
 
@@ -115,21 +125,61 @@
         <img src="{{ post.image.url }}" alt="Post image" class="rounded-lg max-h-80 object-cover">
       </div>
       {% endif %}
-    </div>
+    </a>
 
     <!-- Like & Comment actions -->
-    <div class="mt-4 ml-12 flex gap-6 text-gray-600 dark:text-gray-400">
-      <button class="flex items-center gap-1 hover:text-red-500">
-        <i class="fa-regular fa-heart"></i>
-        <span class="text-sm">{{ post.likes.count }}</span>
-      </button>
-      <button class="flex items-center gap-1 hover:text-blue-500">
-        <i class="fa-regular fa-comment"></i>
-        <span class="text-sm">{{ post.comments.count }}</span>
-      </button>
-    </div>
+<div class="mt-4 ml-12 flex gap-6 text-gray-600 dark:text-gray-400">
+  <button 
+  class="like-btn flex items-center gap-1 hover:text-red-500" 
+  data-post-id="{{ post.id }}">
+  
+  {% if post.is_liked %}
+    <i class="fa-solid fa-heart text-red-500"></i>
+  {% else %}
+    <i class="fa-regular fa-heart"></i>
+  {% endif %}
+  <span class="like-count text-sm">{{ post.likes.count }}</span>
+</button>
 
+ <!-- Comment toggle (we’ll expand this below) -->
+  <button onclick="toggleComments({{ post.id }})" class="flex items-center gap-1 hover:text-blue-500">
+    <i class="fa-regular fa-comment"></i>
+    <span class="text-sm">{{ post.comments.count }}</span>
+  </button>
+</div>
+
+<!-- Comments Section (hidden by default) -->
+<div class="comments-section hidden mt-3 space-y-3" id="comments-{{ post.id }}">
+  <!-- Existing comments -->
+  <div class="comment-list space-y-2">
+    {% for comment in post.comments.all %}
+      <div class="flex items-start gap-2">
+        <img src="{{ comment.user.profile.profile_picture.url|default:'/media/profile_pictures/default.jpg' }}" 
+             class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+        <div>
+          <p class="text-sm">
+            <span class="font-semibold">{{ comment.user.username }}</span>
+            <span class="text-gray-500 text-xs ml-1">{{ comment.created_at|date:"M d, Y H:i" }}</span>
+          </p>
+          <p class="text-sm">{{ comment.content }}</p>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-gray-500 text-sm no-comments">No comments yet.</p>
+    {% endfor %}
   </div>
+
+  <!-- Add new comment -->
+  <form class="comment-form flex items-center gap-2 mt-2" data-post-id="{{ post.id }}">
+    {% csrf_token %}
+    <input type="text" name="content" placeholder="Write a comment..." 
+           class="flex-1 border rounded-lg px-3 py-1 text-sm bg-white dark:bg-gray-800">
+    <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm">Post</button>
+  </form>
+</div>
+
+
+</div>
   {% empty %}
     <p class="text-center text-gray-500 mt-6">No posts yet.</p>
   {% endfor %}
@@ -162,6 +212,92 @@
     }
   });
 </script>
+
+<script>
+  function toggleComments(postId) {
+    const section = document.getElementById(`comments-${postId}`);
+    section.classList.toggle("hidden");
+  }
+</script>
+
+<script>
+  // === LIKE HANDLER ===
+  document.querySelectorAll(".like-btn").forEach(button => {
+    button.addEventListener("click", function () {
+      const postId = this.dataset.postId;
+      const likeCount = this.querySelector(".like-count");
+      const icon = this.querySelector("i");
+
+      fetch(`/posts/${postId}/like/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+      })
+      .then(res => res.json())
+      .then(data => {
+        likeCount.textContent = data.likes_count;
+
+        if (data.is_liked) {
+          icon.classList.remove("fa-regular");
+          icon.classList.add("fa-solid", "text-red-500");
+        } else {
+          icon.classList.remove("fa-solid", "text-red-500");
+          icon.classList.add("fa-regular");
+        }
+      });
+    });
+  });
+
+  // === COMMENT HANDLER ===
+  document.querySelectorAll(".comment-form").forEach(form => {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const postId = this.dataset.postId;
+      const input = this.querySelector("input[name='content']");
+      const content = input.value.trim();
+      const commentList = this.closest(".comments-section").querySelector(".comment-list");
+
+      if (!content) return;
+
+      fetch(`/posts/${postId}/comment/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ content }),
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) return;
+
+        // remove "No comments yet." if present
+        const noComments = commentList.querySelector(".no-comments");
+        if (noComments) noComments.remove();
+
+        // add new comment to list
+        const newComment = document.createElement("div");
+        newComment.classList.add("flex", "items-start", "gap-2");
+        newComment.innerHTML = `
+          <img src="${data.profile_pic}" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+          <div>
+            <p class="text-sm">
+              <span class="font-semibold">${data.username}</span>
+              <span class="text-gray-500 text-xs ml-1">${data.created_at}</span>
+            </p>
+            <p class="text-sm">${data.content}</p>
+          </div>
+        `;
+        commentList.appendChild(newComment);
+
+        input.value = ""; // clear input
+      });
+    });
+  });
+</script>
+
+
 
 </body>
 </html>

@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Comment, Like
 from .forms import PostForm
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, CommentForm
 from django.contrib.auth import login
+from django.utils.timezone import now
 
 
 def home(request):
@@ -37,8 +39,12 @@ def register_user(request):
 @login_required
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
-    temp_var = {"allPosts": posts}
-    return render (request, "posts_list.html", {"allPosts": posts})
+
+    # attach a flag to each post
+    for post in posts:
+        post.is_liked = post.likes.filter(user=request.user).exists()
+
+    return render(request, "posts_list.html", {"allPosts": posts})
 
 @login_required
 def single_post(request, post_id):
@@ -65,6 +71,45 @@ def new_post(request):
     return render(request, "new_post.html", {"form": form})
 
 @login_required
+def toggle_like(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    like, created = Like.objects.get_or_create(user=request.user, post=post)
+
+    if not created:
+        like.delete()
+        is_liked = False
+    else:
+        is_liked = True
+
+    return JsonResponse({
+        "is_liked": is_liked,
+        "likes_count": post.likes.count()
+    })
+ # for now just reload the page
+
+@login_required
+def add_comment(request, post_id):
+    if request.method == "POST":
+        post = get_object_or_404(Post, id=post_id)
+        content = request.POST.get("content", "").strip()
+
+        if content:
+            comment = Comment.objects.create(
+                post=post,
+                user=request.user,
+                content=content,
+                created_at=now()
+            )
+            return JsonResponse({
+                "username": comment.user.username,
+                "profile_pic": comment.user.profile.profile_picture.url if comment.user.profile.profile_picture else "/media/profile_pictures/default.jpg",
+                "content": comment.content,
+                "created_at": comment.created_at.strftime("%b %d, %Y %H:%M"),
+            })
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+@login_required
 def edit_post(request, post_id):
 
     post = Post.objects.get(id = post_id)
@@ -89,40 +134,17 @@ def delete_post(request, post_id):
 
 @login_required   
 def view_post(request, post_id):
-
-    post = Post.objects.get(id = post_id)
-    print(post)
-    if (request.method == "POST"):
-        form = PostForm(request.POST, instance=post)
-        print (form)
-        if  (form.is_valid()):
-            form.save()
-            return redirect('posts_list')
-        
-    else:
-        form = PostForm(instance=post) #create an empty form
-    return render(request, "view_post.html", {"post":post})
-
-@login_required
-def toggle_like(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    like, created = Like.objects.get_or_create(user=request.user, post=post)
+    comments = post.comments.all()
+    is_liked = post.likes.filter(user=request.user).exists()  # ✅ check here
 
-    if not created:
-        like.delete()  # Unlike if already liked
+    return render(request, "view_post.html", {
+        "post": post,
+        "comments": comments,
+        "is_liked": is_liked
+    })
 
-    return redirect("posts_list")
 
-@login_required
-def add_comment(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = request.user
-            comment.post = post
-            comment.save()
-    return redirect("posts_list")
+
 
     

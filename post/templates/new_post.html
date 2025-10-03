@@ -1,70 +1,179 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-{%load static%}
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'post/style.css'%}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Post</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Post | ThoughtDrop</title>
+
+  <!-- Custom Font -->
+  <style>
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-65Medium-Trial.otf' %}") format('opentype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-55Roman-Trial.otf' %}") format('opentype');
+      font-weight: 300;
+    }
+  </style>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Neue Haas Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
-    <div class="container">
-        <div class="logout">
-            <div class="link">
-                <form action= "{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <button type="submit">Logout</button></p>
-                </form>
-            </div>
-        </div>
-        <div class="header">
-        <p class="Heading"> Hi {{ request.user.username}}, let's create a new post </p>
-        
-        </div>
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-        <div class="form-input">
-            <label for="id_title">Title</label>
-            <input name="title" value="{{ form.title.value|default:'' }}" placeholder="Input your title"/>
-            {{ form.title.errors }}
-        </div>
-        <div class="form-input">
-            <label for="">Content</label>
-            <textarea name="content" rows="5" placeholder="Please enter your content here"></textarea>
-            {{form.content.errors}}
-        </div>
+<body class="bg-gray-100 text-black dark:bg-black dark:text-white font-sans transition-colors duration-300">
 
-       <div class="form-input">
-        <label for="file-upload" class="custom-file-upload">
-            Upload your files here
-        </label>
-        <input  name="image" type="file"/>
-        </div>
+<!-- Dark mode toggle -->
+<button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-lg">
+  <i id="theme-icon" class="fa-solid fa-moon"></i>
+</button>
 
-        <div class="post-error">
-            <p>Please fill in all required details</p>
-        </div>
+<!-- Navbar -->
+<nav class="w-full border-b border-gray-300 dark:border-gray-700 flex justify-between items-center px-6 py-4">
+  <!-- Left -->
+  <h1 class="text-xl font-bold"><i class="fa-solid fa-arrows-turn-to-dots"></i> ThoughtDrop</h1>
 
-        <div class="Section">
-        <div class="back-sect">
-            <div class="Back">
-                <i class="fa-solid fa-arrow-left"></i>
-                <a href="{%url 'posts_list'%}">Back</a>
-            </div>
-        </div>
-        <div class="submit-sect">
-            <div class="Submit">
-                <i class="fa-solid fa-check"></i>
-                <button type="submit">Submit</button>
-            </div>
-        </div>
-        </form>
+  <!-- Center -->
+  <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
+    <img src="{{ request.user.profile.profile_picture.url|default:'/media/profile_pictures/default.jpg' }}" 
+         alt="{{ request.user.username }}'s profile picture" 
+         class="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+    <span class="text-sm font-bold">{{ request.user.username }}</span>
+  </div>
+
+  <!-- Right -->
+  <form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="text-red-500 hover:underline">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
+  </form>
+</nav>
+
+<!-- New Post Section -->
+<div class="max-w-2xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 rounded-lg shadow-lg">
+  <h2 class="text-2xl font-bold mb-6"> Hey {{ request.user.username }}, what's on your mind?</h2>
+
+  <form method="POST" enctype="multipart/form-data" class="space-y-5">
+    {% csrf_token %}
+
+    <!-- Title -->
+    <div>
+      <label for="id_title" class="block mb-2 text-sm font-semibold">Title</label>
+      <input name="title" value="{{ form.title.value|default:'' }}" 
+             placeholder="Enter your title"
+             class="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+      {{ form.title.errors }}
     </div>
+
+    <!-- Content -->
+    <div>
+      <label for="id_content" class="block mb-2 text-sm font-semibold">Content</label>
+      <textarea name="content" rows="5" placeholder="Please enter your content here"
+                class="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-2 focus:ring-blue-500"></textarea>
+      {{ form.content.errors }}
     </div>
+
+
+    <!-- Image Upload with Preview -->
+<div class="form-input font-bold">
+    <label for="file-upload" class=" block custom-file-upload">
+         Choose an image for your post.
+    </label>
+    <input id="file-upload" name="image" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 
+             file:rounded-lg file:border-0 
+             file:text-sm file:font-semibold 
+             file:bg-blue-600 file:text-white 
+             hover:file:bg-blue-700" type="file" accept="image/*" onchange="previewImage(event)"/>
+    
+    <!-- Thumbnail Preview -->
+    <div class="image-preview">
+        <img id="thumbnail" src="#" alt="Image preview" style="display: none;"/>
+    </div>
+</div>
+
+    <!-- Error (optional placeholder) -->
+    <div class="text-red-500 text-sm">
+      <p>{{ form.non_field_errors }}</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-between items-center mt-6">
+      <a href="{% url 'posts_list' %}" class="px-4 py-2 rounded-lg border dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </a>
+      <button type="submit" class="px-5 py-2 bg-black text-white rounded-lg dark:bg-gray-300 dark:text-black hover:bg-gray-800 dark:hover:bg-white font-bold transition">
+        <i class="fa-solid fa-check"></i> Post
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Dark mode toggle
+  const toggleBtn = document.getElementById('theme-toggle');
+  const icon = document.getElementById('theme-icon');
+  const html = document.documentElement;
+
+  if (localStorage.getItem('theme') === 'dark' || 
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    icon.classList.remove('fa-moon');
+    icon.classList.add('fa-sun');
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    html.classList.toggle('dark');
+    if (html.classList.contains('dark')) {
+      localStorage.setItem('theme', 'dark');
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    } else {
+      localStorage.setItem('theme', 'light');
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+    }
+  });
+</script>
+
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('thumbnail');
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = "block";
+            preview.style.maxWidth = "120px";  // thumbnail size
+            preview.style.marginTop = "10px";
+            preview.style.borderRadius = "8px";
+        }
+        reader.readAsDataURL(file);
+    } else {
+        preview.style.display = "none";
+    }
+}
+</script>
+
+
 </body>
 </html>

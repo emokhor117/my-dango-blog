@@ -1,49 +1,183 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-{%load static%}
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'post/style.css'%}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Post</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ post.title }} | ThoughtDrop</title>
+
+  <!-- Neue Haas Fonts -->
+  <style>
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-65Medium-Trial.otf' %}") format('opentype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk Round';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Display (Round Dots)/NeueHaasGrotDispRound-95Black-Trial.otf' %}") format('opentype');
+      font-weight: 900;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-55Roman-Trial.otf' %}") format('opentype');
+      font-weight: 300;
+    }
+  </style>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Neue Haas Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-        <p class="Heading">Hi {{ request.user.username}}, take a look at your post.</p>
-        </div>
-        <form method="POST" >
-            {% csrf_token %}
-        <div class="form-input">
-            <input class="post-title" value="{{post.title}}" name="title" placeholder="Input your title" readonly/>
-        </div>
-        <div class="imagepost">
-            <span class="title"{{post.title}}></span>
-            {% if post.image == "" %}
-            
-            {% else %}
-            <div>
-                <img src="{{post.image.url}}" alt="">
-            </div>
-            {% endif %}
-        
-        <div class="form-input"> 
-            <textarea class="content-title" name="content" rows="5" placeholder="Please enter your content here" readonly>{{post.content}}</textarea>
-        </div>
-        </div>
-        <div class="Section">
-        <div class="back-sect">
-            <div class="Back">
-                <i class="fa-solid fa-arrow-left"></i>
-                <a href="{%url 'posts_list'%}">Back</a>
-            </div>
-        </div>
-        </form>
+
+<body class="bg-gray-100 text-black dark:bg-black dark:text-white font-sans transition-colors duration-300">
+
+<!-- Dark mode toggle -->
+<button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-lg">
+  <i id="theme-icon" class="fa-solid fa-moon"></i>
+</button>
+
+<!-- Navbar -->
+<nav class="w-full border-b border-gray-300 dark:border-gray-700 flex justify-between items-center px-6 py-4">
+  <!-- Left: Logo -->
+  <h1 class="text-xl font-bold">
+    <i class="fa-solid fa-arrows-turn-to-dots"></i> ThoughtDrop
+  </h1>
+
+  <!-- Center: Profile -->
+  <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
+    <img src="{{ request.user.profile.profile_picture.url|default:'/media/profile_pictures/default.jpg' }}" 
+         alt="{{ request.user.username }}'s profile picture" 
+         class="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+    <span class="text-sm font-bold">{{ request.user.username }}</span>
+  </div>
+</nav>
+
+<!-- Single Post Section -->
+<div class="max-w-3xl mx-auto mt-8 p-6 bg-white dark:bg-gray-900 rounded-lg shadow">
+
+  <!-- Header row -->
+  <div class="flex items-center gap-3 mb-4">
+    
+    <img src="{{ post.owner.profile.profile_picture.url|default:'/media/profile_pictures/default.jpg' }}" 
+         alt="{{ post.owner.username }}'s profile picture" 
+         class="w-12 h-12 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+    <div>
+      <h2 class="font-semibold">{{ post.owner.username }}</h2>
+      <span class="text-sm text-gray-500 dark:text-gray-400">{{ post.created_at|date:"M d, Y H:i" }}</span>
     </div>
-    </div>
+  </div>
+
+  <!-- Post Title -->
+  <h1 class="text-2xl font-bold mb-4">{{ post.title }}</h1>
+
+  <!-- Post Image -->
+  {% if post.image %}
+  <div class="mb-4">
+    <img src="{{ post.image.url }}" alt="Post image" class="w-full rounded-lg shadow">
+  </div>
+  {% endif %}
+
+  
+
+  <!-- Post Content -->
+  <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">{{ post.content }}</p>
+
+  <!-- Actions -->
+  <div class="flex gap-6 mb-6 text-gray-600 dark:text-gray-400">
+    <!-- Like -->
+    <form action="{% url 'toggle_like' post.id %}" method="post" class="inline">
+      {% csrf_token %}
+      <button type="submit" class="flex items-center gap-1 hover:text-red-500">
+        {% if is_liked %}
+          <i class="fa-solid fa-heart text-red-500"></i>
+        {% else %}
+          <i class="fa-regular fa-heart"></i>
+        {% endif %}
+        <span class="text-sm">{{ post.likes.count }}</span>
+      </button>
+    </form>
+
+    <!-- Comment count -->
+    <button onclick="document.getElementById('comments').classList.toggle('hidden')" 
+            class="flex items-center gap-1 hover:text-blue-500">
+      <i class="fa-regular fa-comment"></i>
+      <span class="text-sm">{{ post.comments.count }}</span>
+    </button>
+  </div>
+
+  <!-- Comments -->
+  <div id="comments" class="hidden mt-4 space-y-4">
+    {% for comment in post.comments.all %}
+      <div class="flex items-start gap-2">
+        <img src="{{ comment.user.profile.profile_picture.url|default:'/media/profile_pictures/default.jpg' }}" 
+             alt="{{ comment.user.username }}" 
+             class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+        <div>
+          <p class="text-sm">
+            <span class="font-semibold">{{ comment.user.username }}</span>
+            <span class="text-gray-500 text-xs ml-1">{{ comment.created_at|date:"M d, Y H:i" }}</span>
+          </p>
+          <p class="text-sm">{{ comment.content }}</p>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-gray-500 text-sm">No comments yet.</p>
+    {% endfor %}
+
+    <!-- Add new comment -->
+    <form action="{% url 'add_comment' post.id %}" method="post" class="flex items-center gap-2 mt-2">
+      {% csrf_token %}
+      <input type="text" name="content" placeholder="Write a comment..." 
+             class="flex-1 border rounded-lg px-3 py-1 text-sm bg-white dark:bg-gray-800">
+      <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm">Post</button>
+    </form>
+  </div>
+
+  <!-- Back button -->
+  <div class="mt-6">
+    <a href="{% url 'posts_list' %}" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
+      <i class="fa-solid fa-arrow-left"></i> Back to Posts
+    </a>
+  </div>
+</div>
+
+<script>
+  // Dark mode toggle logic
+  const toggleBtn = document.getElementById('theme-toggle');
+  const icon = document.getElementById('theme-icon');
+  const html = document.documentElement;
+
+  if (localStorage.getItem('theme') === 'dark' || 
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    icon.classList.replace('fa-moon', 'fa-sun');
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    html.classList.toggle('dark');
+    if (html.classList.contains('dark')) {
+      localStorage.setItem('theme', 'dark');
+      icon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+      localStorage.setItem('theme', 'light');
+      icon.classList.replace('fa-sun', 'fa-moon');
+    }
+  });
+</script>
+
 </body>
 </html>

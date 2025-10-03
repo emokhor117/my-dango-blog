@@ -23,6 +23,9 @@ class Post(models.Model):
 
     def total_comments(self):
         return self.comments.count()
+    
+    def is_liked_by(self, user):
+        return self.likes.filter(user=user).exists()
 
     def __str__(self):
         return f"{self.title} by {self.owner.username}"
