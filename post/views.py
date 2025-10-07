@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Comment, Like
+from .models import Post, Comment, Like, Profile
 from .forms import PostForm
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, CommentForm
 from django.contrib.auth import login
 from django.utils.timezone import now
+
 
 
 def home(request):
@@ -35,6 +36,11 @@ def register_user(request):
 
     return render(request, "register.html", {"form": form, "signup": form})
 
+
+@login_required
+def view_profile(request):
+    profile = get_object_or_404(Profile, user=request.user)
+    return render(request, "view_profile.html")
 
 @login_required
 def post_list(request):

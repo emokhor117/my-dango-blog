@@ -43,11 +43,6 @@
 
 <body class="bg-gray-100 text-black dark:bg-black dark:text-white font-sans transition-colors duration-300">
 
-<!-- Dark mode toggle -->
-<button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-lg">
-  <i id="theme-icon" class="fa-solid fa-moon"></i>
-</button>
-
 <!-- Navbar -->
 <nav class="w-full border-b border-gray-300 dark:border-gray-700 flex justify-between items-center px-6 py-4">
   <!-- Left: Logo -->
@@ -61,6 +56,24 @@
          alt="{{ request.user.username }}'s profile picture" 
          class="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-600">
     <span class="text-sm font-bold">{{ request.user.username }}</span>
+  </div>
+
+    <div class="relative">
+    <button id="menu-btn" class="text-black dark:text-white hover:text-gray-400 hover:rounded-full text-2xl focus:outline-none">
+      ⋮
+    </button>
+
+    <div id="menu-dropdown"
+         class="hidden absolute right-0 mt-2 w-44 bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 z-50">
+      <a href="{% url 'view_profile' %}" 
+         class="block px-4 py-2 hover:bg-gray-100 transition">View Profile</a>
+      <button id="theme-toggle"
+         class="w-full text-left px-4 py-2 hover:bg-gray-100 transition flex items-center gap-2">
+        Change Theme
+      </button>
+      <a href="{% url 'login' %}" 
+         class="block px-4 py-2 hover:bg-red-100 text-red-700 transition">Logout</a>
+    </div>
   </div>
 
   <!-- Right: Logout -->
@@ -187,7 +200,29 @@
 </div>
 
 <script>
-  // Dark mode toggle logic
+  function toggleComments(postId) {
+    const section = document.getElementById(`comments-${postId}`);
+    section.classList.toggle("hidden");
+  }
+</script>
+
+<script>
+  const menuBtn = document.getElementById("menu-btn");
+  const menuDropdown = document.getElementById("menu-dropdown");
+
+  menuBtn.addEventListener("click", () => {
+    menuDropdown.classList.toggle("hidden");
+  });
+
+  // Close dropdown when clicking outside
+  window.addEventListener("click", (e) => {
+    if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+      menuDropdown.classList.add("hidden");
+    }
+  });
+
+  
+  // Dark mode toggle logic (your script)
   const toggleBtn = document.getElementById('theme-toggle');
   const icon = document.getElementById('theme-icon');
   const html = document.documentElement;
@@ -195,30 +230,24 @@
   if (localStorage.getItem('theme') === 'dark' || 
       (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     html.classList.add('dark');
-    icon.classList.remove('fa-moon');
-    icon.classList.add('fa-sun');
+    // icon.classList.remove('fa-moon');
+    // icon.classList.add('fa-sun');
   }
 
   toggleBtn.addEventListener('click', () => {
     html.classList.toggle('dark');
     if (html.classList.contains('dark')) {
       localStorage.setItem('theme', 'dark');
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
+      // icon.classList.remove('fa-moon');
+      // icon.classList.add('fa-sun');
     } else {
       localStorage.setItem('theme', 'light');
-      icon.classList.remove('fa-sun');
-      icon.classList.add('fa-moon');
+      // icon.classList.remove('fa-sun');
+      // icon.classList.add('fa-moon');
     }
   });
 </script>
 
-<script>
-  function toggleComments(postId) {
-    const section = document.getElementById(`comments-${postId}`);
-    section.classList.toggle("hidden");
-  }
-</script>
 
 <script>
   // === LIKE HANDLER ===

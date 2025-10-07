@@ -1,0 +1,127 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ user.username }}’s Profile - ThoughtDrop</title>
+
+  <!-- Custom Fonts -->
+  <style>
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-65Medium-Trial.otf' %}") format('opentype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-55Roman-Trial.otf' %}") format('opentype');
+      font-weight: 300;
+    }
+  </style>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Neue Haas Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 text-black dark:bg-black dark:text-white font-sans transition-colors duration-300">
+
+<!-- Back Button -->
+<a href="{% url 'posts_list' %}" 
+   class="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 rounded-md 
+          bg-gray-200 dark:bg-gray-700 text-sm font-medium text-gray-800 dark:text-gray-100
+          hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+  <i class="fa-solid fa-arrow-left"></i> Back
+</a>
+
+<!-- Dark Mode Toggle -->
+<button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-lg">
+  <i id="theme-icon" class="fa-solid fa-moon"></i>
+</button>
+
+<!-- Profile Section -->
+<div class="min-h-screen flex justify-center items-center py-20 px-4">
+  <div class="bg-white dark:bg-gray-900 shadow-md rounded-xl max-w-3xl w-full overflow-hidden flex flex-col md:flex-row">
+
+    <!-- Left: Profile Picture -->
+    <div class="md:w-1/3 bg-gray-50 dark:bg-gray-800 flex flex-col items-center justify-center p-8">
+      {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture"
+             class="w-32 h-32 rounded-full object-cover border-4 border-gray-300 dark:border-gray-700">
+      {% else %}
+        <div class="w-32 h-32 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-4xl text-gray-600 dark:text-gray-400">
+          <i class="fa-solid fa-user"></i>
+        </div>
+      {% endif %}
+      <h2 class="mt-4 text-xl font-semibold">{{ user.get_full_name|default:user.username }}</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm">@{{ user.username }}</p>
+    </div>
+
+    <!-- Right: Profile Info -->
+    <div class="md:w-2/3 p-8 space-y-6">
+      <h1 class="text-2xl font-bold border-b border-gray-300 dark:border-gray-700 pb-3">
+        Profile Information
+      </h1>
+
+      <div class="space-y-4 text-sm sm:text-base">
+        <p><span class="font-semibold">Email:</span> {{ user.email }}</p>
+        <p><span class="font-semibold">First Name:</span> {{ user.first_name }}</p>
+        <p><span class="font-semibold">Last Name:</span> {{ user.last_name }}</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 pt-6">
+        <a href="{% url 'logout' %}" 
+           class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-red-600 
+                  text-white hover:bg-red-700 transition font-medium">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const html = document.documentElement;
+
+  if (localStorage.getItem('theme') === 'dark') {
+    html.classList.add('dark');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+  }
+
+  themeToggle.addEventListener('click', () => {
+    if (html.classList.contains('dark')) {
+      html.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      themeIcon.classList.remove('fa-sun');
+      themeIcon.classList.add('fa-moon');
+    } else {
+      html.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    }
+  });
+</script>
+
+</body>
+</html>
