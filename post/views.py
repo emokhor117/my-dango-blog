@@ -40,7 +40,7 @@ def register_user(request):
 @login_required
 def view_profile(request):
     profile = get_object_or_404(Profile, user=request.user)
-    return render(request, "view_profile.html")
+    return render(request, "view_profile.html", {"profile": profile})
 
 @login_required
 def post_list(request):
