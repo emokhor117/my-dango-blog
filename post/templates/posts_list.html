@@ -47,7 +47,9 @@
 <nav class="w-full border-b border-gray-300 dark:border-gray-700 flex justify-between items-center px-6 py-4">
   <!-- Left: Logo -->
   <h1 class="text-xl font-bold">
+    <a href="{% url 'posts_list' %}">
     <i class="fa-solid fa-arrows-turn-to-dots"></i> ThoughtDrop
+    </a>
   </h1>
 
   <!-- Center: Profile -->
@@ -60,7 +62,7 @@
 
     <div class="relative">
     <button id="menu-btn" class="text-black dark:text-white hover:text-gray-400 hover:rounded-full text-2xl focus:outline-none">
-      ⋮
+      <i class="fa-solid fa-bars"></i>
     </button>
 
     <div id="menu-dropdown"

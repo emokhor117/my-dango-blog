@@ -76,6 +76,27 @@ def new_post(request):
     print(form.errors)
     return render(request, "new_post.html", {"form": form})
 
+
+@login_required
+def edit_profile(request):
+    profile = get_object_or_404(Profile, user=request.user)
+
+    if request.method == "POST":
+        user = request.user
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+
+        if 'profile_picture' in request.FILES:
+            profile.profile_picture = request.FILES['profile_picture']
+
+        user.save()
+        profile.save()
+        return redirect('view_profile')
+
+    return render(request, "edit_profile.html", {"profile": profile})
+
+
 @login_required
 def toggle_like(request, post_id):
     post = get_object_or_404(Post, id=post_id)

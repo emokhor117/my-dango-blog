@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile - ThoughtDrop</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Neue Haas Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 dark:bg-black text-gray-900 dark:text-white transition-colors duration-300">
+
+<a href="{% url 'view_profile' %}" 
+   class="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 rounded-md 
+          bg-gray-200 dark:bg-gray-700 text-sm font-medium text-gray-800 dark:text-gray-100
+          hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+  <i class="fa-solid fa-arrow-left"></i> Back
+</a>
+
+<div class="min-h-screen flex items-center justify-center py-10 px-4">
+  <div class="bg-white dark:bg-gray-900 shadow-lg rounded-xl p-8 w-full max-w-lg">
+    <h1 class="text-2xl font-bold mb-6 text-center">Edit Profile</h1>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
+
+      <div>
+        <label class="block mb-1 text-sm font-medium">First Name</label>
+        <input type="text" name="first_name" value="{{ user.first_name }}" 
+               class="w-full rounded-lg border border-gray-300 dark:border-gray-700 
+                      bg-gray-50 dark:bg-gray-800 p-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block mb-1 text-sm font-medium">Last Name</label>
+        <input type="text" name="last_name" value="{{ user.last_name }}" 
+               class="w-full rounded-lg border border-gray-300 dark:border-gray-700 
+                      bg-gray-50 dark:bg-gray-800 p-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block mb-1 text-sm font-medium">Email</label>
+        <input type="email" name="email" value="{{ user.email }}" 
+               class="w-full rounded-lg border border-gray-300 dark:border-gray-700 
+                      bg-gray-50 dark:bg-gray-800 p-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block mb-1 text-sm font-medium">Profile Picture</label>
+        {% if profile.profile_picture %}
+          <img src="{{ profile.profile_picture.url }}" 
+               alt="Current Picture" class="w-24 h-24 rounded-full object-cover mb-3">
+        {% endif %}
+        <input type="file" name="profile_picture" 
+               class="w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer 
+                      dark:text-gray-400 dark:bg-gray-800 dark:border-gray-700 focus:outline-none">
+      </div>
+
+      <button type="submit" 
+              class="w-full bg-black hover:bg-blue-700 dark:bg-white text-white font-semibold py-2 rounded-lg">
+         Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
