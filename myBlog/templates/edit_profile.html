@@ -6,6 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Profile - ThoughtDrop</title>
 
+    <style>
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-65Medium-Trial.otf' %}") format('opentype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk Round';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Display (Round Dots)/NeueHaasGrotDispRound-95Black-Trial.otf' %}") format('opentype');
+      font-weight: 900;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk';
+      src: url("{% static 'fonts/Neue_Haas_Grotesk_Collection/Neue Haas Grotesk Text Family/NeueHaasGrotText-55Roman-Trial.otf' %}") format('opentype');
+      font-weight: 300;
+    }
+  </style>
+
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -33,6 +51,12 @@
           hover:bg-gray-300 dark:hover:bg-gray-600 transition">
   <i class="fa-solid fa-arrow-left"></i> Back
 </a>
+
+
+<!-- Dark Mode Toggle -->
+<button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-lg">
+  <i id="theme-icon" class="fa-solid fa-moon"></i>
+</button>
 
 <div class="min-h-screen flex items-center justify-center py-10 px-4">
   <div class="bg-white dark:bg-gray-900 shadow-lg rounded-xl p-8 w-full max-w-lg">
@@ -74,12 +98,38 @@
       </div>
 
       <button type="submit" 
-              class="w-full bg-black hover:bg-blue-700 dark:bg-white text-white font-semibold py-2 rounded-lg">
+              class="w-full bg-black hover:bg-gray-700 dark:text-black dark:bg-gray-300 dark:hover:bg-white text-white font-semibold py-2 rounded-lg">
          Save Changes
       </button>
     </form>
   </div>
 </div>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const html = document.documentElement;
+
+  if (localStorage.getItem('theme') === 'dark') {
+    html.classList.add('dark');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+  }
+
+  themeToggle.addEventListener('click', () => {
+    if (html.classList.contains('dark')) {
+      html.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      themeIcon.classList.remove('fa-sun');
+      themeIcon.classList.add('fa-moon');
+    } else {
+      html.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    }
+  });
+</script>
 
 </body>
 </html>
